@@ -14,6 +14,7 @@ import cloudImage from "./images/cloud.jpeg";
 import sunnyDayImage from "./images/sunny.jpeg";
 import clearSkyImage from "./images/clearsky.jpeg";
 import mistImage from "./images/mist.jpeg";
+import hazeImage from "./images/haze.jpeg";
 
 function App() {
   const [description, setDescription] = useState("");
@@ -21,9 +22,11 @@ function App() {
   const [windSpeed, setwindSpeed] = useState("");
   const [humidity, setHumidity] = useState("");
   const [bgImage, setbgImage] = useState(defaultBackgroundImage);
+  const [ccity, setCity] = useState("");
 
   async function showOutput() {
     let city = document.getElementById("standard-basic").value;
+    setCity(city);
     try {
       const result = await fetch(
         "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -46,6 +49,8 @@ function App() {
         setbgImage(clearSkyImage);
       } else if (weatherDescriptipon.includes("mist")) {
         setbgImage(mistImage);
+      } else if (weatherDescriptipon.includes("haze")) {
+        setbgImage(hazeImage);
       } else {
         setbgImage(defaultBackgroundImage);
       }
@@ -87,6 +92,7 @@ function App() {
               alt="green iguana"
             />
             <CardContent>
+              <h1>{ccity}</h1>
               <Typography gutterBottom variant="h5" component="div">
                 {description.charAt(0).toUpperCase() + description.slice(1)}
               </Typography>
