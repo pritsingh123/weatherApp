@@ -83,7 +83,7 @@ function App() {
       </div>
 
       {description !== "" && (
-        <Card sx={{ maxWidth: 600 }}>
+        <Card sx={{ maxWidth: 900 }}>
           <CardActionArea>
             <CardMedia
               component="img"
@@ -92,7 +92,7 @@ function App() {
               alt="green iguana"
             />
             <CardContent>
-              <h1>{ccity}</h1>
+              <h1>{ccity.charAt(0).toUpperCase() + ccity.slice(1)}</h1>
               <Typography gutterBottom variant="h5" component="div">
                 {description.charAt(0).toUpperCase() + description.slice(1)}
               </Typography>
