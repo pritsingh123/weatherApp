@@ -1,8 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Typography from "@mui/material/Typography";
+import { CardActionArea } from "@mui/material";
+
+import defaultBackgroundImage from "./images/default.avif";
+import rainyImage from "./images/what_is_image_Processing.avif";
+
 function App() {
+  const [description, setDescription] = useState("");
+  const [temperature, settemperature] = useState("");
+  const [windSpeed, setwindSpeed] = useState("");
+  const [humidity, setHumidity] = useState("");
+  const [bgImage, setbgImage] = useState(defaultBackgroundImage);
+
   async function showOutput() {
-    let city = document.getElementById("cityId").value;
-    console.log(city);
+    let city = document.getElementById("standard-basic").value;
     try {
       const result = await fetch(
         "https://api.openweathermap.org/data/2.5/weather?q=" +
@@ -11,28 +28,29 @@ function App() {
       );
       const responseData = await result.json();
       let weatherDescriptipon = responseData.weather[0].description;
-
-      let temperature = responseData.main.temp - -273.15;
+      let temperature = responseData.main.temp;
       let windSpeed = responseData.wind.speed;
       let humidity = responseData.main.humidity;
 
-      if (weatherDescriptipon) {
-        document.getElementById("description").innerHTML = weatherDescriptipon;
-      }
-      if (temperature) {
-        document.getElementById("temperature").innerHTML =
-          "Temp : " + temperature;
-      }
-      if (windSpeed) {
-        document.getElementById("windSpeed").innerHTML =
-          "Wind Speed : " + windSpeed;
-      }
-      if (humidity) {
-        document.getElementById("humidity").innerHTML =
-          "Humidity : " + humidity;
+      if (weatherDescriptipon.includes("clouds")) {
+        console.log("in if");
+        setbgImage(rainyImage);
+      } else {
+        setbgImage(defaultBackgroundImage);
       }
 
-      // console/.log(responseData);
+      if (weatherDescriptipon) {
+        setDescription(weatherDescriptipon);
+      }
+      if (temperature) {
+        settemperature("Temp : " + parseInt(temperature - 273));
+      }
+      if (windSpeed) {
+        setwindSpeed("Wind Speed : " + windSpeed);
+      }
+      if (humidity) {
+        setHumidity("Humidity : " + humidity);
+      }
     } catch (e) {
       alert("Something Went Wrong please check your Input");
       console.log(e);
@@ -40,17 +58,36 @@ function App() {
   }
   return (
     <div className="main-outer">
-      <div className="App center">
-        <input type="text" name="city" id="cityId"></input>
-        <button onClick={showOutput}> Click</button>;
+      <h1 className="top-text">Weather App</h1>
+      <div className="App">
+        <TextField id="standard-basic" label="Enter City" variant="outlined" />
+        <Button variant="outlined" onClick={showOutput}>
+          go
+        </Button>
       </div>
 
-      <div id="resultDiv">
-        <h1 id="description"></h1>
-        <h3 id="temperature"></h3>
-        <h3 id="windSpeed"></h3>
-        <h3 id="humidity"></h3>
-      </div>
+      {description !== "" && (
+        <Card sx={{ maxWidth: 600 }}>
+          <CardActionArea>
+            <CardMedia
+              component="img"
+              height="340"
+              image={bgImage}
+              alt="green iguana"
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {description.charAt(0).toUpperCase() + description.slice(1)}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <h3 id="temperature">{temperature}</h3>
+                <h3 id="windSpeed">{windSpeed}</h3>
+                <h3 id="humidity">{humidity}</h3>
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      )}
     </div>
   );
 }
