@@ -9,7 +9,11 @@ import Typography from "@mui/material/Typography";
 import { CardActionArea } from "@mui/material";
 
 import defaultBackgroundImage from "./images/default.avif";
-import rainyImage from "./images/what_is_image_Processing.avif";
+import rainyImage from "./images/rain.jpeg";
+import cloudImage from "./images/cloud.jpeg";
+import sunnyDayImage from "./images/sunny.jpeg";
+import clearSkyImage from "./images/clearsky.jpeg";
+import mistImage from "./images/mist.jpeg";
 
 function App() {
   const [description, setDescription] = useState("");
@@ -33,8 +37,15 @@ function App() {
       let humidity = responseData.main.humidity;
 
       if (weatherDescriptipon.includes("clouds")) {
-        console.log("in if");
+        setbgImage(cloudImage);
+      } else if (weatherDescriptipon.includes("rain")) {
         setbgImage(rainyImage);
+      } else if (weatherDescriptipon.includes("sun")) {
+        setbgImage(sunnyDayImage);
+      } else if (weatherDescriptipon.includes("clear")) {
+        setbgImage(clearSkyImage);
+      } else if (weatherDescriptipon.includes("mist")) {
+        setbgImage(mistImage);
       } else {
         setbgImage(defaultBackgroundImage);
       }
